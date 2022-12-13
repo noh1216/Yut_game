@@ -1,10 +1,13 @@
 package yutGame;
 
 import java.awt.*;
-import java.security.DomainCombiner;
 
 import javax.swing.*;
 
+import yutGame.Buttons.PlayerButton;
+import yutGame.Buttons.YutBoardButton;
+import yutGame.Buttons.YutStateButton;
+import yutGame.Controllers.Player;
 import yutGame.drawTools.LoadingImage;
 import yutGame.drawTools.RoundRectDraw;
 import yutGame.drawTools.RoundedButton;
@@ -103,7 +106,24 @@ public class CreateGUI {
 		return p;
 	}
 	
-	public JPanel createYutPanel() {
+	public JPanel[] createYuts() {
+		JPanel yut[] = new JPanel[4];
+		for(int i = 0; i < 4; i++) {
+			yut[i] = new LoadingImage("src/yut_images/yut_face.png").loaded_img;
+		}
+		return yut;
+	}
+	public YutStateButton[] createYutStateButton(YutBoardFrame f) {
+		YutStateButton[] state = new YutStateButton[3];
+		
+		for(int i = 2; i >= 1; i--) {
+			state[i] = new YutStateButton(f, "",40, 40, 50, new Color(0xBEB66D));
+		}
+		state[0] = new YutStateButton(f,"",60, 60, 60, new Color(0xBEB66D));
+		return state;
+	}
+	
+	public JPanel createYutPanel(JPanel[] yut, YutStateButton[] state) {
 		JPanel yut_info_panel = new JPanel(new BorderLayout());
 		yut_info_panel.setPreferredSize(new Dimension(440, 100));
 		yut_info_panel.setBackground(Color.WHITE);
@@ -111,9 +131,7 @@ public class CreateGUI {
 		// 윷 들
 		JPanel yuts = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		yuts.setBackground(Color.WHITE);
-		JPanel yut[] = new JPanel[4];
 		for(int i = 0; i < 4; i++) {
-			yut[i] = new LoadingImage("src/yut_images/yut_face.png").loaded_img;
 			yuts.add(yut[i]);
 		}
 		yuts.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
@@ -121,18 +139,15 @@ public class CreateGUI {
 		// 나온 윷의 상태 
 		JPanel yut_states = new JPanel(new FlowLayout());
 		yut_states.setBackground(Color.white);
-		RoundedButton[] state = new RoundedButton[3];
 		for(int i = 2; i >= 1; i--) {
-			state[i] = new RoundedButton(40, 40, 50, new Color(0xBEB66D));
 			state[i].setPreferredSize(new Dimension(40, 40));
 			yut_states.add(state[i]);
 		}
-		state[0] = new RoundedButton(60, 60, 60, new Color(0xBEB66D));
 		state[0].setPreferredSize(new Dimension(60, 60));
 		yut_states.add(state[0]);
 		yut_states.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
-		state[0].setText("개");
-		state[0].setFont(new Font("고딕",Font.BOLD, 26));
+//		state[0].setText("개");
+//		state[0].setFont(new Font("고딕",Font.BOLD, 26));
 		
 		JPanel shut_yut_panel = new JPanel(new FlowLayout());
 		RoundedButton shut_yut = new RoundedButton(100, 50, 20, Color.LIGHT_GRAY);
@@ -149,7 +164,15 @@ public class CreateGUI {
 		return yut_info_panel;
 	}
 	
-	public JPanel createUserInfoPanel() {
+	public PlayerButton[] createPlayerButton(YutBoardFrame f, Player p, Color c) {
+		PlayerButton[] ps = new PlayerButton[4];
+		for(int i =0;i  < 4; i++) {
+			ps[i] = new PlayerButton(f, p, i+1, 15, 30,15, c);
+		}
+		return ps;
+	}
+	
+	public JPanel createUserInfoPanel(PlayerButton[] pieces1, PlayerButton[] pieces2) {
 		JPanel user_info_panel = new JPanel(new GridLayout(1,2));
 		
 		// 각 유저별 패널 
@@ -183,20 +206,16 @@ public class CreateGUI {
 		pieces2_panel.setBackground(new Color(0xFF8A8A));
 		pieces1_panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,20));
 		pieces2_panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,20));
-		RoundedButton pieces1[] = new RoundedButton[4];
-		RoundedButton pieces2[] = new RoundedButton[4];
 		
 		int piece_w = 15, piece_h = 30;
 		for(int i =0;i  < 4; i++) {
-			pieces1[i] = new RoundedButton(piece_w, piece_h, 15, new Color(0x5A6FDE));
-			pieces2[i] = new RoundedButton(piece_w, piece_h, 15, new Color(0xE14343));
 			
 			pieces1[i].setPreferredSize(new Dimension(piece_w, piece_h));
 			pieces2[i].setPreferredSize(new Dimension(piece_w, piece_h));
 			
-			pieces1[i].setText(Integer.toString(i));
+			pieces1[i].setText(Integer.toString(i+1));
 			pieces1[i].setForeground(Color.black);
-			pieces2[i].setText(Integer.toString(i));
+			pieces2[i].setText(Integer.toString(i+1));
 			pieces2[i].setForeground(Color.black);
 			
 			pieces1_panel.add(pieces1[i]);
