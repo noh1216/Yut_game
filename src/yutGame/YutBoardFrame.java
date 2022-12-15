@@ -47,8 +47,10 @@ public class YutBoardFrame extends JFrame{
 		
 		// 유저정보 패널 구성
 		// - 이름 태그 받아오기
-		game_data.nametag1 = gui.nametag("User1");
-		game_data.nametag2 = gui.nametag("User2");
+		game_data.name1 = JOptionPane.showInputDialog("플레이어 1의 이름을 입력해주세요");
+		game_data.name2 = JOptionPane.showInputDialog("플레이어 2의 이름을 입력해주세요");
+		game_data.nametag1 = gui.nametag(game_data.name1);
+		game_data.nametag2 = gui.nametag(game_data.name2);
 		game_data.player1_nametag = gui.drawNameTag(game_data.nametag1, new Color(0xCADFFF));
 		game_data.player2_nametag = gui.drawNameTag(game_data.nametag2, new Color(0xFF8A8A));
 		
@@ -78,29 +80,42 @@ public class YutBoardFrame extends JFrame{
 	
 	// 윷을 굴리는 버튼이 눌렸을 때 
 	public void rolledYut(boolean[] yuts, String state) {
-		if(game_data.yut_state_cnt <=2 && game_data.player.getRemainingTurns() > 0) {	
-			// 윷 프레임 업데이트 
-			for(int i =0; i < yuts.length; i++) {	
-				if(yuts[i] == true) {
-					game_data.yuts[i*2].setVisible(true);
-					game_data.yuts[i*2+1].setVisible(false);
+		// 빽도 예외 처리 (보드위에 말이 없을 떄 뺵도가 나오지 않게끔)
+		if(state.equals("빽도")) {
+			for(int i = 0; i < 4; i++) {
+				if(game_data.player.getPieces()[i].getPosition() != 0) {
+					break;
 				}
-				else {
-					game_data.yuts[i*2].setVisible(false);
-					game_data.yuts[i*2+1].setVisible(true);
+				else if(i == 3) {
+					return ;
 				}
 			}
-			
-			// 윷 상태 버튼 업데이트 
-			int n = game_data.yut_state_cnt;
-			while(n >0) {
-				game_data.yut_states[n].setText(game_data.yut_states[n-1].getText());
-				n-=1;
+		}
+		else {
+			if(game_data.yut_state_cnt <=2 && game_data.player.getRemainingTurns() > 0) {	
+				// 윷 프레임 업데이트 
+				for(int i =0; i < yuts.length; i++) {	
+					if(yuts[i] == true) {
+						game_data.yuts[i*2].setVisible(true);
+						game_data.yuts[i*2+1].setVisible(false);
+					}
+					else {
+						game_data.yuts[i*2].setVisible(false);
+						game_data.yuts[i*2+1].setVisible(true);
+					}
+				}
+				
+				// 윷 상태 버튼 업데이트 
+				int n = game_data.yut_state_cnt;
+				while(n >0) {
+					game_data.yut_states[n].setText(game_data.yut_states[n-1].getText());
+					n-=1;
+				}
+				game_data.yut_states[0].setText(state);
+				game_data.yut_state_cnt++;
+				if(!(state.equals("모") || state.equals("윷")))
+					game_data.player.setRemainingTurns(-1);
 			}
-			game_data.yut_states[0].setText(state);
-			game_data.yut_state_cnt++;
-			if(!(state.equals("모") || state.equals("윷")))
-				game_data.player.setRemainingTurns(-1);
 		}
 			
 	}
@@ -111,7 +126,8 @@ public class YutBoardFrame extends JFrame{
 	 * @param num
 	 */
 	public void selectedPlayer(int num) {
-		game_data.yut_board[moving].setText("");
+		if(moving < 30)
+			game_data.yut_board[moving].setText("");
 		selected_piece = num;
 		for(int i = 0; i < game_data.yut_state_cnt; i++) {
 			game_data.yut_states[i].setEnabled(true);
@@ -121,33 +137,49 @@ public class YutBoardFrame extends JFrame{
 	// 보드 버튼 옆에 원래있던 말을 없애고 새로 말을 그려준다.
 	public void drawPiece(int cell_num)	{
 		PlayerButton[] pieces = game_data.player.getPieces();
-		game_data.yut_board[pieces[selected_piece].getPosition()].setText("");
-		pieces[selected_piece].setEnabled(false);
-		if(!game_data.player.player1_turn()) {
-			game_data.player1_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
-			pieces[selected_piece].setPosition(cell_num);
-			game_data.player1_piece_board[pieces[selected_piece].getPosition()].setVisible(true);
+		
+		if(game_data.yut_board[0].getText() == "Goal") {
+			pieces[selected_piece].Done();
+			pieces[selected_piece].setText("X");
+			pieces[selected_piece].setEnabled(false);
+			game_data.yut_board[0].setText("Start");
+			game_data.yut_board[0].setEnabled(true);
 			
+			if(game_data.player.player1_turn()) {
+				game_data.player1_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
+			}
+			else {
+				game_data.player2_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
+			}
 		}
 		else {
-			game_data.player2_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
-			pieces[selected_piece].setPosition(cell_num);
-			game_data.player2_piece_board[pieces[selected_piece].getPosition()].setVisible(true);
+			game_data.yut_board[moving].setText("");
+			game_data.yut_board[moving].setEnabled(false);
+			pieces[selected_piece].setEnabled(false);
+			
+			if(game_data.player.player1_turn()) {
+				if(pieces[selected_piece].getPosition() !=0)
+					game_data.player1_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
+				pieces[selected_piece].setPosition(cell_num);
+				game_data.player1_piece_board[pieces[selected_piece].getPosition()].setVisible(true);
+				
+			}
+			else {
+				if(pieces[selected_piece].getPosition() != 0)
+					game_data.player2_piece_board[pieces[selected_piece].getPosition()].setVisible(false);
+				pieces[selected_piece].setPosition(cell_num);
+				game_data.player2_piece_board[pieces[selected_piece].getPosition()].setVisible(true);
+			}
+			
+			// 윷, 보드버튼 초기화 부분
 		}
-		
-		// 윷, 보드버튼 초기화 부분
-		game_data.yut_states[on_position-1].setText("");
-		game_data.yut_states[on_position-1].setEnabled(false);
-		for(int i = game_data.yut_state_cnt; i> on_position; i--) {
-			game_data.yut_states[i-1] = game_data.yut_states[i];
-			game_data.yut_states[i].setText("");
-			game_data.yut_states[i].setEnabled(false);
-		}
+		System.out.println(on_position);
+		game_data.yut_states[on_position].setText("");
+		game_data.yut_states[on_position].setEnabled(false);
 		game_data.yut_state_cnt--;
 		if(game_data.yut_state_cnt <= 0) {
 			game_data.player.updatePlayerTurn();
 		}
-		
 	}
 	
 	// 윷상태 버튼을 눌렀을 때 보드 버튼 활성화
@@ -156,20 +188,33 @@ public class YutBoardFrame extends JFrame{
 		on_position = yut_pos;
 		
 		int now_pos = pieces[selected_piece].getPosition();
-		int move = pieces[selected_piece].getPosition() + on_pos;
-		moving = move;
-		if((now_pos>= 16 && now_pos <= 19 && move > 20) || move > 29) { // 게임 종료 조건
-			game_data.yut_board[0].setEnabled(true);
-			game_data.yut_board[0].setText("Goal");
-		}
-		else {
-			if(now_pos==5) {
-				game_data.yut_board[move].setEnabled(true);
-				game_data.yut_board[move].setText("O");
+		if(!(now_pos == 0 && on_pos == -1)) {
+			int move = now_pos+ on_pos;
+			if((now_pos>= 16 && now_pos <= 19 && move > 20) || move > 29) { // 게임 종료 조건
+				game_data.yut_board[0].setEnabled(true);
+				game_data.yut_board[0].setText("Goal");
 			}
-			else {				
-				game_data.yut_board[move].setEnabled(true);
-				game_data.yut_board[move].setText("O");
+			else {
+				int add = 0;
+				if(now_pos==5 || now_pos == 10) {add = 15;}
+				else if(now_pos == 23) {add = 5;}
+				else if (now_pos == 10) {add = 15;}
+				else if(now_pos == 10 && on_pos == 3) {add = 13; move = now_pos;}
+				else if(now_pos == 26 && on_pos == 2) {add = -13; move = now_pos;}
+				else if(now_pos == 27 && on_pos == 1) {add = -14; move = now_pos;}
+				else if((now_pos>= 21&& now_pos <= 25) && move >=26) {add =-11;}
+				
+				
+				moving= add+move;
+				if(moving >29) {
+					game_data.yut_board[0].setEnabled(true);
+					game_data.yut_board[0].setText("Goal");
+					moving -= now_pos;
+				}
+				else {
+					game_data.yut_board[moving].setEnabled(true);
+					game_data.yut_board[moving].setText("O");
+				}
 			}
 		}
 		

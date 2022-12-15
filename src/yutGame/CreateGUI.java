@@ -29,6 +29,7 @@ public class CreateGUI {
 			else {
 				yut_board[i] = new YutBoardButton(i,25,25, 50, frame);				
 			}
+//			yut_board[i].setText(String.valueOf(i));
 			yut_board[i].setEnabled(false);
 		}
 		return yut_board;
@@ -180,10 +181,10 @@ public class CreateGUI {
 		YutStateButton[] state = new YutStateButton[3];
 		
 		for(int i = 2; i >= 1; i--) {
-			state[i] = new YutStateButton(f, i+1,40, 40, 50, new Color(0xBEB66D));
+			state[i] = new YutStateButton(f, i,40, 40, 50, new Color(0xBEB66D));
 			state[i].setEnabled(false);
 		}
-		state[0] = new YutStateButton(f, 1,60, 60, 60, new Color(0xBEB66D));
+		state[0] = new YutStateButton(f, 0,60, 60, 60, new Color(0xBEB66D));
 		state[0].setEnabled(false);
 		return state;
 	}
@@ -233,7 +234,7 @@ public class CreateGUI {
 	public PlayerButton[] createPlayerButton(YutBoardFrame f, PlayerController p, Color c) {
 		PlayerButton[] ps = new PlayerButton[4];
 		for(int i =0;i  < 4; i++) {
-			ps[i] = new PlayerButton(f, p, i+1, 15, 30,15, c);
+			ps[i] = new PlayerButton(f, p, i, 15, 30,15, c);
 			ps[i].setEnabled(false);
 		}
 		return ps;

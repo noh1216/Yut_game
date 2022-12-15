@@ -17,6 +17,7 @@ public class GameData {
 	public int yut_state_cnt; // 나온 윷의 갯수 (최대 3개) 
 	
 	public PlayerController player; // 플레이어  
+	public String name1, name2; // 플레이어 1,2의 이
 	public JLabel nametag1, nametag2; // 플레이어 1,2 의 이름 태그 
 	public RoundRectDraw player1_nametag, player2_nametag; // 플레이어 1,2 의 이름 태그 
 	

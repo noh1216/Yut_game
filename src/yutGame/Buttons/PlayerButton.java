@@ -18,7 +18,6 @@ public class PlayerButton extends RoundedButton implements ActionListener{
 		super(w,h,r,c);
 		frame = f;
 		number = n;
-		now_pos=1;
 		addActionListener(this);
 	}
 	// 플레이어 버튼의 현재위치를 설정하고 불러오는 함수 
@@ -36,5 +35,6 @@ public class PlayerButton extends RoundedButton implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(!done)
 			frame.selectedPlayer(number);
+		
 	}
 }

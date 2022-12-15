@@ -20,11 +20,13 @@ public class YutStateButton extends RoundedButton implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if(this.getText().equals("도")) frame.onBoardCell(0, yut_state_pos);
-		else if(this.getText().equals("개")) frame.onBoardCell(1,yut_state_pos);
-		else if(this.getText().equals("걸")) frame.onBoardCell(2,yut_state_pos);
-		else if(this.getText().equals("윷")) frame.onBoardCell(3,yut_state_pos);
-		else if(this.getText().equals("모")) frame.onBoardCell(4,yut_state_pos);
+		this.getText();
+		if(this.getText().equals("도")) frame.onBoardCell(1, yut_state_pos);
+		else if(this.getText().equals("개")) frame.onBoardCell(2,yut_state_pos);
+		else if(this.getText().equals("걸")) frame.onBoardCell(3,yut_state_pos);
+		else if(this.getText().equals("윷")) frame.onBoardCell(4,yut_state_pos);
+		else if(this.getText().equals("모")) frame.onBoardCell(5,yut_state_pos);
+		else if(this.getText().equals("뺵도")) frame.onBoardCell(-1, yut_state_pos);
 		else;
 	}
 }

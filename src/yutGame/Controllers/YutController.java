@@ -44,7 +44,7 @@ public class YutController {
 		else if(cal == 3) return "걸";
 		else if(cal == 4) return "윷";
 		else if(cal == 5) return "모";
-		else if(cal == -1) return "뺵도";
+		else if(cal == -1) return "빽도";
 		return "";
 	}
 	

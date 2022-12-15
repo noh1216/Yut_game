@@ -14,7 +14,6 @@ public class PlayerController {
 		player_btn1 = pb1;
 		player_btn2 = pb2;
 		game_data = g;
-		player1_turn = true;
 		updatePlayerTurn();
 	}
 	
@@ -35,23 +34,23 @@ public class PlayerController {
 	
 	// 플레이어의 턴을 끝내고 상대방에게 턴을 넘긴다.
 	public void updatePlayerTurn() {
+		player1_turn = !player1_turn;
 		if(player1_turn) {
-			game_data.nametag1.setText("> User1");
-			game_data.nametag2.setText("User2");
+			game_data.nametag1.setText("> "+game_data.name1);
+			game_data.nametag2.setText(game_data.name2);
 			for(int i = 0; i < 4; i++) {
 				player_btn1[i].setEnabled(true);
 				player_btn2[i].setEnabled(false);
 			}
 		}
 		else{
-			game_data.nametag2.setText("> User2");
-			game_data.nametag1.setText("User1");
+			game_data.nametag2.setText("> "+game_data.name2);
+			game_data.nametag1.setText(game_data.name1);
 			for(int i = 0; i < 4; i++) {
 				player_btn1[i].setEnabled(false);
 				player_btn2[i].setEnabled(true);
 			}
 		}
-		player1_turn = !player1_turn;
 		remaining_turns = 1;
 	}
 	
