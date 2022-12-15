@@ -5,9 +5,9 @@ import yutGame.drawTools.RoundRectDraw;
 
 public class PlayerController {
 	
-	private static boolean player1_turn = false;
-	private PlayerButton[] player_btn1, player_btn2;
-	private GameData game_data;
+	private static boolean player1_turn = false; // 플레이어 턴 확인 
+	private PlayerButton[] player_btn1, player_btn2; // 플레이어의 말 버튼 
+	private GameData game_data; // 게임 데이터 
 	private int remaining_turns; // 플레이어 한 명의 남은 턴 (기본 1)
 	
 	public PlayerController(PlayerButton[] pb1, PlayerButton[] pb2, GameData g) {
@@ -18,6 +18,7 @@ public class PlayerController {
 		updatePlayerTurn();
 	}
 	
+	// 플레이어 턴 리턴 
 	public boolean player1_turn() {
 		return player1_turn;
 	}

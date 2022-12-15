@@ -11,7 +11,7 @@ import yutGame.Controllers.PlayerController;
 
 public class YutBoardFrame extends JFrame{
 	
-	private int selected_piece,on_position, moving; // 현재 선택된 플레이어의 피스 
+	private int selected_piece,on_position, moving; // 현재 선택된 플레이어의 피스, 움직일 거리 
 	private GameData game_data; // 게임 정보가 저장되어 있는 객체 
 	
 	public YutBoardFrame() {
@@ -118,6 +118,7 @@ public class YutBoardFrame extends JFrame{
 		}
 	}
 	
+	// 보드 버튼 옆에 원래있던 말을 없애고 새로 말을 그려준다.
 	public void drawPiece(int cell_num)	{
 		PlayerButton[] pieces = game_data.player.getPieces();
 		game_data.yut_board[pieces[selected_piece].getPosition()].setText("");
@@ -149,6 +150,7 @@ public class YutBoardFrame extends JFrame{
 		
 	}
 	
+	// 윷상태 버튼을 눌렀을 때 보드 버튼 활성화
 	public void onBoardCell(int on_pos, int yut_pos) {
 		PlayerButton[] pieces = game_data.player.getPieces();
 		on_position = yut_pos;

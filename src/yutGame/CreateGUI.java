@@ -16,6 +16,7 @@ public class CreateGUI {
 		frame =f;
 	}
 	
+	// 윷 보드에 들어갈 버튼 초기화 
 	public YutBoardButton[] createYutBoard() {
 		YutBoardButton[] yut_board = new YutBoardButton[30];
 		yut_board[0] = new YutBoardButton(0, 40, 40, 50, frame);
@@ -33,6 +34,7 @@ public class CreateGUI {
 		return yut_board;
 	}
 	
+	// 플레이어 2의 위치버튼 만들기 
 	public RoundRectDraw[] player2PieceBoard() {
 		RoundRectDraw[] sub = new RoundRectDraw[30];
 		for(int i = 1; i < 30; i++) {
@@ -41,6 +43,7 @@ public class CreateGUI {
 		}
 		return sub;
 	}
+	// 플레이어 1의 위치버튼 만들기 
 	public RoundRectDraw[] player1PieceBoard() {
 		RoundRectDraw[] sub = new RoundRectDraw[30];
 		for(int i = 1; i < 30; i++) {
@@ -50,6 +53,7 @@ public class CreateGUI {
 		return sub;
 	}
 	
+	// 보드 만들기 
 	public JPanel createBoard(int width, int height, YutBoardButton[] yut_board, RoundRectDraw[] pb1, RoundRectDraw[] pb2) {
 		JPanel p = new JPanel();
 		p.setLayout(null);
@@ -158,6 +162,7 @@ public class CreateGUI {
 		return p;
 	}
 
+	// 윷이미지를 부럴온다. 
 	public JPanel[] createYuts() {
 		JPanel yut[] = new JPanel[8];
 		for(int i = 0; i < 8; i+=2) {
@@ -170,6 +175,7 @@ public class CreateGUI {
 		}
 		return yut;
 	}
+	// 윷 상태버튼 만들기 
 	public YutStateButton[] createYutStateButton(YutBoardFrame f) {
 		YutStateButton[] state = new YutStateButton[3];
 		
@@ -181,7 +187,7 @@ public class CreateGUI {
 		state[0].setEnabled(false);
 		return state;
 	}
-	
+	// 윷 전체 패널 
 	public JPanel createYutPanel(JPanel[] yut, YutStateButton[] state) {
 		JPanel yut_info_panel = new JPanel(new BorderLayout());
 		yut_info_panel.setPreferredSize(new Dimension(440, 100));
@@ -223,6 +229,7 @@ public class CreateGUI {
 		return yut_info_panel;
 	}
 	
+	// 플레이어의 말 버튼 
 	public PlayerButton[] createPlayerButton(YutBoardFrame f, PlayerController p, Color c) {
 		PlayerButton[] ps = new PlayerButton[4];
 		for(int i =0;i  < 4; i++) {
@@ -232,11 +239,13 @@ public class CreateGUI {
 		return ps;
 	}
 	
+	// 플레이어 이름 태그 (추후 이름 입력가능)
 	public JLabel nametag(String name) {
 		JLabel l = new JLabel(name);
 		return l;
 	}
 	
+	// 이름 태그 그리기 
 	public RoundRectDraw drawNameTag(JLabel u, Color c) {
 		Color bg_c = new Color(0x494949);
 		RoundRectDraw user_nametag = new RoundRectDraw(70, 40, 15, bg_c, new GridLayout(1,1));
@@ -248,7 +257,7 @@ public class CreateGUI {
 		
 		return user_nametag;
 	}
-	
+	// 플레이어 전체 패널 
 	public JPanel createUserInfoPanel(PlayerButton[] pieces1, PlayerButton[] pieces2, RoundRectDraw user1_nametag, RoundRectDraw user2_nametag) {
 		JPanel user_info_panel = new JPanel(new GridLayout(1,2));
 		
