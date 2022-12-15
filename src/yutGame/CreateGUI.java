@@ -4,32 +4,53 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import yutGame.Buttons.PlayerButton;
-import yutGame.Buttons.YutBoardButton;
-import yutGame.Buttons.YutStateButton;
-import yutGame.Controllers.Player;
-import yutGame.drawTools.LoadingImage;
-import yutGame.drawTools.RoundRectDraw;
-import yutGame.drawTools.RoundedButton;
+import yutGame.Buttons.*;
+import yutGame.Controllers.*;
+import yutGame.drawTools.*;
 
 public class CreateGUI {
 	
+	private YutBoardFrame frame;
+	
+	public CreateGUI(YutBoardFrame f) {
+		frame =f;
+	}
+	
 	public YutBoardButton[] createYutBoard() {
 		YutBoardButton[] yut_board = new YutBoardButton[30];
-		yut_board[0] = new YutBoardButton(0, 40, 40, 50);
+		yut_board[0] = new YutBoardButton(0, 40, 40, 50, frame);
 		yut_board[0].setText("Start");
+		yut_board[0].setEnabled(false);
 		for(int i = 1; i< 30; i++) {
 			if((i%5 == 0 && i <= 20)|| i == 23) {
-				yut_board[i] = new YutBoardButton(i,30,30, 50);			
+				yut_board[i] = new YutBoardButton(i,30,30, 50, frame);	
 			}
 			else {
-				yut_board[i] = new YutBoardButton(i,25,25, 50);				
+				yut_board[i] = new YutBoardButton(i,25,25, 50, frame);				
 			}
+			yut_board[i].setEnabled(false);
 		}
 		return yut_board;
 	}
 	
-	public JPanel createBoard(int width, int height, YutBoardButton[] yut_board) {
+	public RoundRectDraw[] player2PieceBoard() {
+		RoundRectDraw[] sub = new RoundRectDraw[30];
+		for(int i = 1; i < 30; i++) {
+			sub[i] = new RoundRectDraw(15, 25, 10, new Color(0xE14343));
+			sub[i].setVisible(false);
+		}
+		return sub;
+	}
+	public RoundRectDraw[] player1PieceBoard() {
+		RoundRectDraw[] sub = new RoundRectDraw[30];
+		for(int i = 1; i < 30; i++) {
+			sub[i] = new RoundRectDraw(15, 25, 10, new Color(0x5A6FDE));
+			sub[i].setVisible(false);
+		}
+		return sub;
+	}
+	
+	public JPanel createBoard(int width, int height, YutBoardButton[] yut_board, RoundRectDraw[] pb1, RoundRectDraw[] pb2) {
 		JPanel p = new JPanel();
 		p.setLayout(null);
 		
@@ -45,17 +66,29 @@ public class CreateGUI {
 				x = x_pos + 5;
 			}
 			yut_board[i].setBounds(x, y_pos-y_weight*i, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x+38, y_pos-y_weight*i, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x+23, y_pos-y_weight*i, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		// 위 6~10
 		for(int i = 5; i< 10; i++) {
 			yut_board[i].setBounds(x_pos-x_weight*(i-5), y_space, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_pos-x_weight*(i-5)+38, y_space, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_pos-x_weight*(i-5)+23, y_space, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		// 왼쪽 11~15
 		for(int i = 10; i< 15; i++) {
 			yut_board[i].setBounds(x_space, y_space+y_weight*(i-10), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_space+38, y_space+y_weight*(i-10), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_space+23, y_space+y_weight*(i-10), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		// 아래 16~20
 		for(int i = 15; i < 20; i++) {
@@ -64,7 +97,11 @@ public class CreateGUI {
 				y = y_pos + 5;
 			}
 			yut_board[i].setBounds(x_space+x_weight*(i-15),y, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_space+x_weight*(i-15)+38,y, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_space+x_weight*(i-15)+23,y, yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		
 		// 대각선 21~23
@@ -76,14 +113,22 @@ public class CreateGUI {
 				y_w-= 3;
 			}
 			yut_board[i].setBounds(x_pos-x_w*(i-20),y_space+y_w*(i-20), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_pos-x_w*(i-20)+38,y_space+y_w*(i-20), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_pos-x_w*(i-20)+23,y_space+y_w*(i-20), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		// 대각선 24~25
 		for(int i = 25; i >= 24; i--) {
 			int x_w = x_weight - yut_board[i].getCellWidth()/2 + yut_board[i].getCellWidth()/4;
 			int y_w = y_weight - yut_board[i].getCellHeight()/2 + yut_board[i].getCellHeight()/4;
 			yut_board[i].setBounds(x_space+x_w*(26-i),y_pos-y_w*(26-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_space+x_w*(26-i)+38,y_pos-y_w*(26-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_space+x_w*(26-i)+23,y_pos-y_w*(26-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		
 		// 대각선 26~27
@@ -91,25 +136,37 @@ public class CreateGUI {
 			int x_w = x_weight - yut_board[i].getCellWidth()/2 + yut_board[i].getCellWidth()/4;
 			int y_w = y_weight - yut_board[i].getCellHeight()/2 + yut_board[i].getCellHeight()/4;
 			yut_board[i].setBounds(x_space+x_w*(i-25),y_space+y_w*(i-25), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_space+x_w*(i-25)+38,y_space+y_w*(i-25), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_space+x_w*(i-25)+23,y_space+y_w*(i-25), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
-		
 		
 		// 대각선 28~29
 		for(int i = 29; i >= 28; i--) {
 			int x_w = x_weight - yut_board[i].getCellWidth()/2 + yut_board[i].getCellWidth()/4;
 			int y_w = y_weight - yut_board[i].getCellHeight()/2 + yut_board[i].getCellHeight()/4;
 			yut_board[i].setBounds(x_pos-x_w*(30-i),y_pos-y_w*(30-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb1[i].setBounds(x_pos-x_w*(30-i)+38,y_pos-y_w*(30-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
+			pb2[i].setBounds(x_pos-x_w*(30-i)+23,y_pos-y_w*(30-i), yut_board[i].getCellWidth()+5, yut_board[i].getCellHeight()+5);
 			p.add(yut_board[i]);
+			p.add(pb1[i]);
+			p.add(pb2[i]);
 		}
 		
 		return p;
 	}
-	
+
 	public JPanel[] createYuts() {
-		JPanel yut[] = new JPanel[4];
-		for(int i = 0; i < 4; i++) {
+		JPanel yut[] = new JPanel[8];
+		for(int i = 0; i < 8; i+=2) {
 			yut[i] = new LoadingImage("src/yut_images/yut_face.png").loaded_img;
+			if(i >=6) 
+				yut[i+1] = new LoadingImage("src/yut_images/yut_back_unique.png").loaded_img;
+			else
+				yut[i+1] = new LoadingImage("src/yut_images/yut_back.png").loaded_img;
+			yut[i+1].setVisible(false);
 		}
 		return yut;
 	}
@@ -117,9 +174,11 @@ public class CreateGUI {
 		YutStateButton[] state = new YutStateButton[3];
 		
 		for(int i = 2; i >= 1; i--) {
-			state[i] = new YutStateButton(f, "",40, 40, 50, new Color(0xBEB66D));
+			state[i] = new YutStateButton(f, i+1,40, 40, 50, new Color(0xBEB66D));
+			state[i].setEnabled(false);
 		}
-		state[0] = new YutStateButton(f,"",60, 60, 60, new Color(0xBEB66D));
+		state[0] = new YutStateButton(f, 1,60, 60, 60, new Color(0xBEB66D));
+		state[0].setEnabled(false);
 		return state;
 	}
 	
@@ -131,7 +190,7 @@ public class CreateGUI {
 		// 윷 들
 		JPanel yuts = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		yuts.setBackground(Color.WHITE);
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 8; i++) {
 			yuts.add(yut[i]);
 		}
 		yuts.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
@@ -141,16 +200,16 @@ public class CreateGUI {
 		yut_states.setBackground(Color.white);
 		for(int i = 2; i >= 1; i--) {
 			state[i].setPreferredSize(new Dimension(40, 40));
+			state[0].setFont(new Font("고딕",Font.BOLD, 14));
 			yut_states.add(state[i]);
 		}
 		state[0].setPreferredSize(new Dimension(60, 60));
 		yut_states.add(state[0]);
 		yut_states.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 0));
-//		state[0].setText("개");
-//		state[0].setFont(new Font("고딕",Font.BOLD, 26));
+		state[0].setFont(new Font("고딕",Font.BOLD, 26));
 		
 		JPanel shut_yut_panel = new JPanel(new FlowLayout());
-		RoundedButton shut_yut = new RoundedButton(100, 50, 20, Color.LIGHT_GRAY);
+		RollButton shut_yut = new RollButton(new YutController(), frame, 100, 50, 20, Color.LIGHT_GRAY);
 		shut_yut.setPreferredSize(new Dimension(100, 50));
 		shut_yut.setText("윷 던지기");
 		shut_yut_panel.setBorder(BorderFactory.createEmptyBorder(20,10,5,10));
@@ -164,15 +223,33 @@ public class CreateGUI {
 		return yut_info_panel;
 	}
 	
-	public PlayerButton[] createPlayerButton(YutBoardFrame f, Player p, Color c) {
+	public PlayerButton[] createPlayerButton(YutBoardFrame f, PlayerController p, Color c) {
 		PlayerButton[] ps = new PlayerButton[4];
 		for(int i =0;i  < 4; i++) {
 			ps[i] = new PlayerButton(f, p, i+1, 15, 30,15, c);
+			ps[i].setEnabled(false);
 		}
 		return ps;
 	}
 	
-	public JPanel createUserInfoPanel(PlayerButton[] pieces1, PlayerButton[] pieces2) {
+	public JLabel nametag(String name) {
+		JLabel l = new JLabel(name);
+		return l;
+	}
+	
+	public RoundRectDraw drawNameTag(JLabel u, Color c) {
+		Color bg_c = new Color(0x494949);
+		RoundRectDraw user_nametag = new RoundRectDraw(70, 40, 15, bg_c, new GridLayout(1,1));
+		
+		u.setHorizontalAlignment(JLabel.CENTER);
+		u.setForeground(Color.white);
+		user_nametag.add(u);
+		user_nametag.setBackground(c);
+		
+		return user_nametag;
+	}
+	
+	public JPanel createUserInfoPanel(PlayerButton[] pieces1, PlayerButton[] pieces2, RoundRectDraw user1_nametag, RoundRectDraw user2_nametag) {
 		JPanel user_info_panel = new JPanel(new GridLayout(1,2));
 		
 		// 각 유저별 패널 
@@ -184,21 +261,6 @@ public class CreateGUI {
 		user1_panel.setBorder(BorderFactory.createEmptyBorder(30,0,0,0));
 		user2_panel.setBorder(BorderFactory.createEmptyBorder(30,0,0,0));
 		
-		Color bg_c = new Color(0x494949);
-		RoundRectDraw user1_nametag = new RoundRectDraw(70, 40, 15, bg_c, new GridLayout(1,1));
-		RoundRectDraw user2_nametag = new RoundRectDraw(70, 40, 15, bg_c, new GridLayout(1,1));
-		
-		JLabel u1 = new JLabel("User1");
-		u1.setHorizontalAlignment(JLabel.CENTER);
-		u1.setForeground(Color.white);
-		user1_nametag.add(u1);
-		user1_nametag.setBackground(new Color(0xCADFFF));
-		JLabel u2 = new JLabel("User2");
-		u2.setHorizontalAlignment(JLabel.CENTER);
-		u2.setForeground(Color.white);
-		user2_nametag.add(u2);
-		user2_nametag.setBackground(new Color(0xFF8A8A));
-		
 		
 		JPanel pieces1_panel = new JPanel(new FlowLayout());
 		JPanel pieces2_panel = new JPanel(new FlowLayout());
@@ -209,7 +271,6 @@ public class CreateGUI {
 		
 		int piece_w = 15, piece_h = 30;
 		for(int i =0;i  < 4; i++) {
-			
 			pieces1[i].setPreferredSize(new Dimension(piece_w, piece_h));
 			pieces2[i].setPreferredSize(new Dimension(piece_w, piece_h));
 			

@@ -30,6 +30,7 @@ public class RoundRectDraw extends JPanel{
 		
 		g.setColor(bg_color);
 		g.fillRoundRect(0, 0, width, height, radius, radius); 
+		
     	
 	}
 }

@@ -11,9 +11,10 @@ public class YutBoardButton extends RoundedButton implements ActionListener{
 	private int cell_number;
 	private YutBoardFrame frame;
 	
-	public YutBoardButton(int n, int w, int h, int r) {
+	public YutBoardButton(int n, int w, int h, int r, YutBoardFrame f) {
 		super(w,h, r);
 		cell_number = n;
+		frame = f;
 		addActionListener(this);
 	}
 	

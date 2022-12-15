@@ -9,23 +9,22 @@ import yutGame.drawTools.RoundedButton;
 
 public class YutStateButton extends RoundedButton implements ActionListener{
 
-	private String this_state;
 	private YutBoardFrame frame;
-	private PlayerButton player_btn;
+	int yut_state_pos;
 	
-	public YutStateButton(YutBoardFrame f ,String n, int w, int h, int r, Color c) {
+	public YutStateButton(YutBoardFrame f,int n ,int w, int h, int r, Color c) {
 		super(w,h,r,c);
 		frame = f;
-		this_state = n;
+		yut_state_pos = n;
 		addActionListener(this);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if(this_state.equals("도")) frame.onBoardCell( , 1);
-		else if(this_state.equals("개")) frame.onBoardCell( , 2);
-		else if(this_state.equals("걸")) frame.onBoardCell( , 3);
-		else if(this_state.equals("윷")) frame.onBoardCell( , 4);
-		else if(this_state.equals("모")) frame.onBoardCell( , 5);
+		if(this.getText().equals("도")) frame.onBoardCell(0, yut_state_pos);
+		else if(this.getText().equals("개")) frame.onBoardCell(1,yut_state_pos);
+		else if(this.getText().equals("걸")) frame.onBoardCell(2,yut_state_pos);
+		else if(this.getText().equals("윷")) frame.onBoardCell(3,yut_state_pos);
+		else if(this.getText().equals("모")) frame.onBoardCell(4,yut_state_pos);
 		else;
 	}
 }
